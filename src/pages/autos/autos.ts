@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { 
   NavController,     //Control de navegacion
   NavParams,         //Control de Parametros
-  AlertController    //Controlador de Alertas
+  AlertController,   //Controlador de Alertas
+  ModalController    //Controlador de Modals
 } from 'ionic-angular';
 
 //Operadores RXJS
@@ -12,6 +13,8 @@ import {Observable} from 'rxjs/Observable';
 
 //Servicio de Autos
 import { AutosProvider } from '../../providers/autos/autos';
+//Pagina para registrar autos que será nuestro modal
+import { AgregarPage } from '../agregar/agregar';
 
 @Component({
   selector: 'page-autos',
@@ -23,12 +26,15 @@ export class AutosPage implements OnInit{
   imagen:any 
   //Array de autos a iterar
   public autos:any[];
-  
+  //Bandera para mostrar mensaje sin autos
+  sinAutos:boolean
   constructor(
+    private modalCtr:ModalController,
     public navCtrl: NavController, 
     public navParams: NavParams,
     private alertCtrl: AlertController,
     private autosProvider:AutosProvider) {
+      this.imagen = 'assets/imgs/sinauto.png';
   }
 
   ionViewDidLoad() {
@@ -47,8 +53,15 @@ export class AutosPage implements OnInit{
         }else{
           let autos = Observable.of(result)
           autos.map(autos=> 
-            autos.map(auto=>Object.assign({},auto,{img:"assets/imgs/"+auto.marca.toLowerCase()+".png"}))
+            autos.map(auto=>Object.assign({},auto,{img:'assets/imgs/'+auto.marca.toLowerCase()+'.png'}))
           ).subscribe(autos=>this.autos = autos)
+          //Si no hay autos mostramos un mensaje
+          //mas agradable
+          if(this.autos.length<1){
+            this.sinAutos = true
+          }else{
+            this.sinAutos = false
+          }
         }
       },
       error=>{
@@ -77,5 +90,16 @@ export class AutosPage implements OnInit{
       ]
     });
     alert.present(prompt);
+  }
+
+  public modalAgregar(){
+    //Abrimos nuestro modal
+    let createModal = this.modalCtr.create(AgregarPage)
+    //Al cerrarse actualizamos hacemos la llamada nuevamente de todos los autos
+    createModal.onDidDismiss(()=>{
+      this.getAutos()
+    })
+    //Presentamos el modal
+    createModal.present()
   }
 }
