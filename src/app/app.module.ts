@@ -1,11 +1,14 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { HttpModule } from '@angular/http';
+
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
+import { AutosPage } from '../pages/autos/autos';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -19,8 +22,8 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 
 //Providers
-import { HttpModule } from '@angular/http';
 import { GmapsProvider } from '../providers/gmaps/gmaps';
+import { AutosProvider } from '../providers/autos/autos';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,8 @@ import { GmapsProvider } from '../providers/gmaps/gmaps';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    AutosPage
   ],
   imports: [
     BrowserModule,
@@ -44,7 +48,8 @@ import { GmapsProvider } from '../providers/gmaps/gmaps';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    AutosPage
   ],
   providers: [
     StatusBar,
@@ -52,7 +57,8 @@ import { GmapsProvider } from '../providers/gmaps/gmaps';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Geolocation,
     Diagnostic,
-    GmapsProvider
+    GmapsProvider,
+    AutosProvider
   ]
 })
 export class AppModule {}
